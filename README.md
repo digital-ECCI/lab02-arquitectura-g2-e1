@@ -24,12 +24,9 @@ Indice:
 ### 1. Sumador/Restador
 
 #### 1.1 Descripción
-El presente laboratorio detalla la implementación en hardware de un circuito capaz de realizar operaciones aritméticas de suma y resta con palabras de 4 bits. Para optimizar los recursos del hardware, se utilizó el principio matemático del complemento a 2, el cual permite codificar números negativos en binario y transformar las restas en sumas. Esto hizo posible reutilizar la arquitectura de un sumador estándar, añadiendo únicamente compuertas lógicas y una señal de control, simplificando significativamente el diseño.
+En el  presente laboratorio se realiza la implementación de un sumador restador  capaz de realizar operaciones aritméticas de suma y resta con 4 bits. Para optimizar los recursos del hardware, se utilizó el principio matemático del complemento a 2, el cual permite codificar números negativos en binario y transformar las restas en sumas. Esto hizo posible reutilizar la arquitectura de un sumador estándar, añadiendo únicamente compuertas lógicas y una señal de control, simplificando significativamente el diseño.
 
-El diseño se realizó de forma modular en lenguaje de descripción de hardware (HDL) Verilog, estructurándose en tres niveles:
-
-/*
-Descripción del diseño
+El diseño se realizó de forma modular en lenguaje de descripción  (HDL) Verilog, estructurándose en tres niveles:
 
 1.Módulo sumador_1:
 Es la unidad fundamental (Full Adder) que suma dos bits individuales (A y B)
@@ -44,12 +41,14 @@ se conecta a la entrada de acarreo del bit inmediatamente superior.
 3.Módulo sumador_restador (Top Level):
 Es el circuito final que integra el sumador de 4 bits y la lógica para el
 complemento a 2. Incorpora una señal de control Sel (Selector) donde:
+
 Sel = 0 → realiza una suma
 Sel = 1 → realiza una resta
 
 Fundamento lógico de la resta (Complemento a 2)
 
 Matemáticamente, la resta A - B se transforma en una suma mediante:
+
 
 A - B = A + (~B + 1)
 
@@ -62,18 +61,18 @@ Se utilizan compuertas XOR:
 
 assign B_xor[0] = B[0] ^ Sel;
 
-Si Sel = 1, la compuerta invierte los bits del operando B.
-Si Sel = 0, los bits pasan sin modificarse.
+Si     Sel = 1, la compuerta invierte los bits del operando B.
+Si     Sel = 0, los bits pasan sin modificarse.
 
 Paso 2 (+1):
 La señal Sel se conecta directamente a la entrada de acarreo inicial (Ci)
-del sumador_4bits. Por lo tanto, cuando Sel = 1 (resta), se suma
+del sumador_4bits. Por lo tanto, cuando     Sel = 1 (resta), se suma
 automáticamente un 1 al resultado invertido, completando así
 la operación de complemento a 2.
 
 El bit de acarreo final (Co) permite interpretar el resultado en las
 operaciones de resta.
-*/
+
 #### 1.2 Diagramas
 
 
