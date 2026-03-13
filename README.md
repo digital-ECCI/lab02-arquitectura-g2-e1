@@ -81,12 +81,11 @@ DIAGRAMA RTL
 
 ### 1. Simulación del sumador/restador
 
+#### 1.1 Descripción
 Para verificar y validar el correcto funcionamiento del diseño antes de su implementación física, se realizó una simulación empleando el software Icarus Verilog. La simulación es un paso importante en el diseño digital, ya que permite identificar y corregir errores de lógica observando el comportamiento de las señales en el tiempo.Se elaboró un testbench (banco de pruebas) para estimular las entradas `A`, `B` y `Sel` del módulo Vsumador_restadorV. Se probaron diferentes casos de uso:Suma normal (`Sel = 0`): Se verificó que el circuito sumara correctamente números sin generar alteraciones en el operando B.Resta con resultado positivo (`Sel = 1`): Ejemplo conceptual como $7 - 5$, donde el sistema calcula el complemento a 2 de 5 ($0101_2 \rightarrow 1010_2 + 1 = 1011_2$) y realiza la suma $0111_2 + 1011_2 = 10010_2$. Se descartó el acarreo final (MSB) para obtener el resultado de $0010_2$ (2 en decimal).Resta con resultado negativo (Sel = 1): Casos donde el minuendo es menor que el sustraendo (ej. $3 - 7$), verificando que el acarreo de salida sea 0 y el resultado se presente correctamente en formato complemento a 2
 
-#### 1.1 Descripción
-
 #### 1.2 Diagrama
-
+Diagrama de icarus verilog
 
 ## Evidencias de implementación
 
