@@ -28,13 +28,13 @@ En el  presente laboratorio se realiza la implementación de un sumador restador
 
 El diseño se realizó de forma modular en lenguaje de descripción  (HDL) Verilog, estructurándose en tres niveles:
 
-1.Módulo sumador_1:
+1.Módulo `sumador_1`:
 Es la unidad fundamental (Full Adder) que suma dos bits individuales (A y B)
-junto con un acarreo de entrada (Ci), produciendo un bit de suma (So) y un
-acarreo de salida (Co).
+junto con un acarreo de entrada (`Ci`), produciendo un bit de suma (`So`) y un
+acarreo de salida (`Co`).
 
-2.Módulo sumador_4bits:
-Se construyó instanciando cuatro módulos sumador_1 conectados en cascada
+2.Módulo `sumador_4bits`:
+Se construyó instanciando cuatro módulos `sumador_1` conectados en cascada
 (Ripple Carry Adder). El acarreo de salida de cada bit menos significativo
 se conecta a la entrada de acarreo del bit inmediatamente superior.
 
@@ -59,19 +59,19 @@ En el código esto se implementa de la siguiente manera:
 Paso 1 (Inversión):
 Se utilizan compuertas XOR:
 
-assign B_xor[0] = B[0] ^ Sel;
+`assign B_xor[0] = B[0] ^ Sel;`
 
-Si     Sel = 1, la compuerta invierte los bits del operando B.
-Si     Sel = 0, los bits pasan sin modificarse.
+Si     `Sel = 1`, la compuerta invierte los bits del operando B.
+Si     `Sel = 0`, los bits pasan sin modificarse.
 
 Paso 2 (+1):
-La señal Sel se conecta directamente a la entrada de acarreo inicial (Ci)
-del sumador_4bits. Por lo tanto, cuando     Sel = 1 (resta), se suma
+La señal Sel se conecta directamente a la entrada de acarreo inicial (`Ci`)
+del sumador_4bits. Por lo tanto, cuando     `Sel = 1` (resta), se suma
 automáticamente un 1 al resultado invertido, completando así
 la operación de complemento a 2.
 
-El bit de acarreo final (Co) permite interpretar el resultado en las
-operaciones de resta.
+El bit de acarreo final (`Co`) permite interpretar el resultado en las
+operaciones de resta. Un `Co = 1` indica un resultado positivo, mientras que un `Co = 0` indica un resultado negativo expresado en complemento a 2.
 
 #### 1.2 Diagramas
 
