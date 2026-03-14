@@ -121,14 +121,15 @@ Para obtener el resultado, se suma el minuendo con el complemento a 1 del sustra
 
 El cálculo vertical se desarrolla de la siguiente manera:
 
-```text
+``text
       1001    (Minuendo: 9)
     + 1001    (Complemento a 1 del sustraendo: 6 invertido)
     --------
     1 0010    (Suma parcial. El '1' de la izquierda es el acarreo de salida Co)
         +1    (Adición del bit Ci para completar el complemento a 2)
     --------
-      0011    (Magnitud del resultado final)
+      0011    (Magnitud del resultado final)``endtext
+
 ![Implementacion FPGA](<Captura de pantalla 2026-03-13 234340.png>)
 
 ## Conclusiones
