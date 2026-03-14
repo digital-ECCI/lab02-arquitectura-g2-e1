@@ -103,8 +103,8 @@ Las salida fueron asignadas al resultado `S[3:0]` y el bit de acarreo final `Co`
 
 Validación Física: Una vez programada la FPGA, se procedió a validar el circuito introduciendo con varios casos de prueba (previamente verificados en la simulación con Icarus Verilog). Se observó en tiempo real cómo la conmutación del bit Sel alteraba el flujo de datos del operando B a través de las compuertas XOR, confirmando visualmente en los LEDs la correcta ejecución matemática del complemento a 2 y la entrega del resultado final.
 
-# Ejemplo 1
-### 3.1. Desarrollo aritmético de la resta: 9 - 6
+### Ejemplo 1
+### . Desarrollo de la resta: 9 - 6
 
 Para ilustrar el proceso matemático que ejecuta el hardware, a continuación se detalla el cálculo manual de la operación $9 - 6$ empleando la lógica de complemento a 2, exactamente como se procesa a nivel de bits.
 
