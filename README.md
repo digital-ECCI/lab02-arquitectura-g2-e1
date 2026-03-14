@@ -104,55 +104,31 @@ Las salida fueron asignadas al resultado `S[3:0]` y el bit de acarreo final `Co`
 Validación Física: Una vez programada la FPGA, se procedió a validar el circuito introduciendo con varios casos de prueba (previamente verificados en la simulación con Icarus Verilog). Se observó en tiempo real cómo la conmutación del bit Sel alteraba el flujo de datos del operando B a través de las compuertas XOR, confirmando visualmente en los LEDs la correcta ejecución matemática del complemento a 2 y la entrega del resultado final.
 
 # Ejemplo 1
-### 3.1. Análisis detallado de la operación en Hardware: $9 - 6$
+### 3.1. Desarrollo aritmético de la resta: 9 - 6
 
-Para validar el funcionamiento lógico del sumador/restador implementado en la FPGA, se realiza el análisis paso a paso de la operación aritmética $9 - 6$. El objetivo es demostrar cómo la arquitectura descrita en Verilog procesa las señales eléctricas a nivel de bits para obtener el resultado correcto mediante la técnica de complemento a 2.
+Para ilustrar el proceso matemático que ejecuta el hardware, a continuación se detalla el cálculo manual de la operación $9 - 6$ empleando la lógica de complemento a 2, exactamente como se procesa a nivel de bits.
 
-**1. Definición de las entradas:**
-En los interruptores (*switches*) de la FPGA se configuran los siguientes valores binarios de 4 bits:
-* **Minuendo ($A$):** $9_{10} = 1001_2$
-* **Sustraendo ($B$):** $6_{10} = 0110_2$
-* **Señal de control ($Sel$):** $1$ (Modo resta activado)
+**1. Representación binaria de los operandos:**
+* Minuendo ($A$): $9_{10} = 1001_2$
+* Sustraendo ($B$): $6_{10} = 0110_2$
 
-**2. Obtención del complemento a 1 (Capa de compuertas XOR):**
-El operando $B$ atraviesa las compuertas lógicas XOR. Como $Sel = 1$, las compuertas actúan como inversores lógicos de cada bit de la entrada $B$.
-* $B\_xor = B \oplus Sel$
-* $B\_xor = 0110_2 \oplus 1111_2 = 1001_2$
+**2. Obtención del complemento a 1:**
+Se invierten los bits del sustraendo ($B$):
+* $\sim B = 1001_2$
 
-**3. Suma binaria con acarreo inicial (Complemento a 2 en hardware):**
-El hardware no calcula el complemento a 2 en un paso aislado, sino que lo integra directamente en el sumador de 4 bits (*Ripple Carry Adder*). Al módulo sumador ingresan tres elementos: el operando $A$ ($1001_2$), el operando $B$ invertido ($1001_2$) y el acarreo inicial $Ci$ que está conectado directamente a $Sel$ ($Ci = 1$). 
+**3. Operación secuencial de suma:**
+Para obtener el resultado, se suma el minuendo con el complemento a 1 del sustraendo, y finalmente se le adiciona un $1$ (que en el circuito físico corresponde a la señal de acarreo de entrada `Ci = 1`). 
 
-La operación que el hardware ejecuta es: $A + B\_xor + Ci$.
-A continuación, se desglosa el comportamiento lógico interno bit a bit (desde el menos significativo al más significativo):
+El cálculo vertical se desarrolla de la siguiente manera:
 
-* **Bit 0 (`sumador_1 bit0`):**
-  * Entradas: $A_0 = 1$, $B\_xor_0 = 1$, $Ci = 1$
-  * Suma: $1 + 1 + 1 = 3_{10}$ (en binario $11_2$)
-  * Salidas: $S_0 = \mathbf{1}$ | Acarreo hacia bit 1 ($c_1$) = $\mathbf{1}$
-
-* **Bit 1 (`sumador_1 bit1`):**
-  * Entradas: $A_1 = 0$, $B\_xor_1 = 0$, $Ci = c_1 = 1$
-  * Suma: $0 + 0 + 1 = 1_{10}$ (en binario $01_2$)
-  * Salidas: $S_1 = \mathbf{1}$ | Acarreo hacia bit 2 ($c_2$) = $\mathbf{0}$
-
-* **Bit 2 (`sumador_1 bit2`):**
-  * Entradas: $A_2 = 0$, $B\_xor_2 = 0$, $Ci = c_2 = 0$
-  * Suma: $0 + 0 + 0 = 0_{10}$ (en binario $00_2$)
-  * Salidas: $S_2 = \mathbf{0}$ | Acarreo hacia bit 3 ($c_3$) = $\mathbf{0}$
-
-* **Bit 3 (`sumador_1 bit3` - MSB):**
-  * Entradas: $A_3 = 1$, $B\_xor_3 = 1$, $Ci = c_3 = 0$
-  * Suma: $1 + 1 + 0 = 2_{10}$ (en binario $10_2$)
-  * Salidas: $S_3 = \mathbf{0}$ | Acarreo final de salida ($Co$) = $\mathbf{1}$
-
-**4. Interpretación del Resultado final:**
-Al consolidar las salidas del sumador, obtenemos:
-* **Magnitud ($S$):** $S_3 S_2 S_1 S_0 = 0011_2$. Al convertir este valor binario a decimal, obtenemos el número **$3$**, que corresponde exactamente a la magnitud de la resta $9 - 6$.
-* **Acarreo Final ($Co$):** $Co = 1$. En el contexto del complemento a 2, un acarreo de salida en nivel lógico alto confirma que el resultado de la operación es **positivo**.
-
-**Evidencia física:**
-Como se puede observar en la fotografía de la implementación física (tarjeta FPGA encendida), los LEDs asignados a los pines de salida reflejan fielmente este comportamiento teórico. El LED correspondiente al acarreo de salida ($Co$) se encuentra iluminado, validando el signo positivo, mientras que el banco de LEDs correspondientes a la magnitud ($S$) muestran el patrón lógico encendido/apagado correspondiente a la cadena binaria `0011`.
-
+```text
+      1001    (Minuendo: 9)
+    + 1001    (Complemento a 1 del sustraendo: 6 invertido)
+    --------
+    1 0010    (Suma parcial. El '1' de la izquierda es el acarreo de salida Co)
+        +1    (Adición del bit Ci para completar el complemento a 2)
+    --------
+      0011    (Magnitud del resultado final)
 ![Implementacion FPGA](<Captura de pantalla 2026-03-13 234340.png>)
 
 ## Conclusiones
