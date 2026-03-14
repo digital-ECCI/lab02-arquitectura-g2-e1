@@ -75,7 +75,7 @@ operaciones de resta. Un `Co = 1` indica un resultado positivo, mientras que un 
 
 #### 1.2 Diagramas
 
-DIAGRAMA RTL 
+![Diagrama RTL](image-1.png)
 
 ## Simulaciones 
 
